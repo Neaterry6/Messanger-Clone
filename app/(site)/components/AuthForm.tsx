@@ -23,7 +23,7 @@ const AuthForm = () => {
     useEffect(() => {
         if(session?.status === "authenticated")
         {
-            router.push("/users");
+            router.push("/feed"); // UPDATED: redirect to feed after login
         }
     },[session?.status, router])
 
@@ -83,7 +83,7 @@ const AuthForm = () => {
                 if(callback?.ok && !callback?.error)
                 {
                     toast.success("Logged in successfully!")
-                    router.push("/users")
+                    router.push("/feed"); // UPDATED: redirect to feed after login
                 }
             })
             .finally(() => setIsLoading(false))
@@ -108,6 +108,7 @@ const AuthForm = () => {
             if(callback?.ok && !callback?.error)
             {
                 toast.success("Logged in successfully!")
+                router.push("/feed"); // UPDATED: social login goes to feed
             }
         })
         .finally(() => setIsLoading(false))
@@ -176,7 +177,6 @@ const AuthForm = () => {
                             icon={BsGithub}
                             onClick={() => socialAction("github")}
                         />
-
                         <AuthSocialButton 
                             icon={BsGoogle}
                             onClick={() => socialAction("google")}
