@@ -1,62 +1,33 @@
-"use client"
+import { HiChat } from "react-icons/hi"
+import { HiUsers } from "react-icons/hi2"
 
-import { useState } from "react"
-import useRoutes from "../../hooks/useRoutes"
-import DesktopItem from "./DesktopItem"
-import { User } from "@prisma/client"
-import Avatar from "../Avatar"
-import SettingsModal from "./SettingsModal"
+const DesktopSidebar = ({ currentUser }) => {
+  const routes = [
+    { label: "Feed", href: "/feed", icon: "🌐" }, // ADDED FEED LINK
+    { label: "Chat", href: "/conversations", icon: HiChat },
+    { label: "Users", href: "/users", icon: HiUsers },
+    // ...others as before
+  ];
 
-interface DesktopSidebarProps {
-    currentUser: User
-}
+  return (
+    <div className="flex flex-col h-full justify-between">
+      <nav>
+        <ul>
+          {routes.map(route => (
+            <li key={route.href}>
+              <a href={route.href} className="flex items-center gap-2 p-3 hover:bg-gray-100 hover:dark:bg-gray-800 rounded">
+                {typeof route.icon === "string" ? <span>{route.icon}</span> : <route.icon className="w-6 h-6" />}
+                {route.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="p-3">
+        <span className="text-xs text-gray-400">{currentUser?.name}</span>
+      </div>
+    </div>
+  );
+};
 
-const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
-    currentUser,
-}) => {
-
-    const routes = useRoutes()
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    return (
-        <>
-        <SettingsModal 
-            currentUser={currentUser}
-            isOpen={isOpen}
-            onClose={()=>setIsOpen(false)}
-        />
-        <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-20 xl:px-6 lg:overflow-y-auto lg:bg-white lg:border-r-[1px] lg:pb-4 lg:flex lg:flex-col justify-between">
-            <nav className="mt-4 flex flex-col justify-between">
-                <ul 
-                    role="list"
-                    className="flex flex-col items-center space-y-1"
-                >
-                    {routes.map((item) => (
-                        <DesktopItem 
-                            key={item.label}
-                            href={item.href}
-                            label={item.label}
-                            icon={item.icon}
-                            active={item.active}
-                            onClick={item.onClick}
-                        />
-                    ))}
-                </ul>
-            </nav>
-
-            <nav className="mt-4 flex flex-col justify-between items-center">
-                <div
-                    onClick={() => setIsOpen(true)}
-                    className="cursor-pointer hover:opacity-75 transition"
-                >
-                    <Avatar 
-                        user={currentUser}
-                    />
-                </div>
-            </nav>
-        </div>
-        </>
-    )
-}
-
-export default DesktopSidebar
+export default DesktopSidebar;
