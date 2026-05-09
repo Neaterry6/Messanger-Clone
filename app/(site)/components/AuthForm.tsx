@@ -4,8 +4,6 @@ import Button from "../../components/Button"
 import Input from "../../components/inputs/Input"
 import { useCallback, useEffect, useState } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
-import AuthSocialButton from "./AuthSocialButton"
-// Social auth removed — email only
 import axios from "axios"
 import { toast } from "react-hot-toast"
 import { signIn, useSession } from "next-auth/react"
@@ -95,30 +93,6 @@ const AuthForm = () => {
             })
             .finally(() => setIsLoading(false))
         }
-    }
-
-    const socialAction = (action: string) => {
-        setIsLoading(true)
-
-        signIn(
-            action,
-            {
-                redirect: false,
-            }
-        )
-        .then((callback) => {
-            if(callback?.error)
-            {
-                toast.error("Invalid Credentials!")
-            }
-
-            if(callback?.ok && !callback?.error)
-            {
-                toast.success("Logged in successfully!")
-                router.push("/feed"); // UPDATED: social login goes to feed
-            }
-        })
-        .finally(() => setIsLoading(false))
     }
 
     return ( 
